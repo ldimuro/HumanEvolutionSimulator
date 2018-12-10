@@ -21,7 +21,7 @@ func calculateEpoch() -> String {
 //Converts a year (e.g. 50,000 BC) to real-time date
 func yearToDate(inputYear: Int) -> String {
     
-    let totalSeconds = Int(Double(startDate) / secondsToYears)
+    let totalSeconds = numOfSecondsElapsed
     var value = inputYear
     
     if value < 0 {
@@ -41,7 +41,7 @@ func yearToDate(inputYear: Int) -> String {
         seconds = Int(abs(numOfSec))
     }
     
-    let trueDate = someDateTime.addingTimeInterval(TimeInterval(seconds))
+    let trueDate = birthdayDate!.addingTimeInterval(TimeInterval(seconds))
     
     let yearFormatter = DateFormatter()
     yearFormatter.dateFormat = "MM/dd/yy HH:mm:ss"
@@ -99,7 +99,6 @@ func calculateEra() -> Era {
     }
     else if countingBackwards > -1000 && countingBackwards <= 500 {
         let iron = Era(name: "Iron Age", ceilingPop: 175000000)
-        print("COUNTING BACKWARDS: \(countingBackwards)")
         return iron
     }
     else if countingBackwards > 500 && countingBackwards <= 1500 {

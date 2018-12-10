@@ -9,22 +9,36 @@
 import Foundation
 import AppKit
 
-//let currentDate = Date()
-let someDateTime = Date(timeIntervalSinceReferenceDate: 492822400) // 452822400 = May 8th, 2015 2:50 AM (Reaches 0 AD from current date)
-                                                                   // 492822400 = My first day of college (ASU)
-let futureDate = Date(timeIntervalSinceReferenceDate: 673660800) // May 5th, 2022 12:00 AM
-let secondsToYears = 0.02314815 // Each day represents 2,000 years starting from 2,600,000 BC
-let diffInDays = Date().timeIntervalSince(someDateTime)
-let years = Int(diffInDays * secondsToYears)
-var realDays = years / 2000
-let startDate = 2600000
-let currentYear = abs(startDate - years)
-var epoch = ""
-let populationFactor = 100
-var population = 1000
+//INTRO TO SIMULATOR
+print("""
 
-let numberFormatter = NumberFormatter()
-numberFormatter.numberStyle = NumberFormatter.Style.decimal
+
+    *****************************************
+    |       "TIMELINE OF HUMAN HISTORY"     |
+    |                                       |
+    |             By: Lou DiMuro            |
+    |               12/10/2018              |
+    *****************************************
+
+    """)
+
+print("Welcome to the TIMELINE OF HUMAN HISTORY Simulator!")
+print()
+print("Enter your birthday (MM/DD/YYYY):")
+
+var birthday = readLine()
+
+let birthdayFormatter = DateFormatter()
+birthdayFormatter.dateFormat = "MM/dd/yyyy"
+var birthdayDate = birthdayFormatter.date(from: birthday!)
+
+while birthdayDate == nil {
+    print("Not a date, enter birthday again:")
+    birthday = readLine()
+    birthdayDate = birthdayFormatter.date(from: birthday!)
+}
+
+
 
 
 var milestones = [Milestone]()
@@ -68,18 +82,130 @@ milestones.append(Milestone(description: "INTERGALACTIC ERA BEGINS",            
 milestones.append(Milestone(description: "END OF THE UNIVERSE",                 date: calculateMilestones(date: 300000000), symbol: "💥")) // = ~2500 AD         }
 
 
+let numOfSecondsElapsed = Int(Date().timeIntervalSince(birthdayDate!))
+let startDate = 2600000
+let secondsToYears: Double = Double(startDate) / Double(numOfSecondsElapsed) // Each second represents a certain amount of years starting from 2,600,000 BC
+let years = Int(Double(numOfSecondsElapsed) * secondsToYears) + milestones[31].date // INTERGALACTIC ERA BEGINS
+var realDays = Calendar.current.dateComponents([.day], from: birthdayDate!, to: Date()).day // Number of days since user's birthday
+let currentYear = abs(startDate - years)
+var epoch = ""
+let populationFactor = 100
+var population = 1000
+
+let numberFormatter = NumberFormatter()
+numberFormatter.numberStyle = NumberFormatter.Style.decimal
+
 //Initial Properties
 let worldName = "Lou's Desk"
 let era = calculateEra()
 epoch = calculateEpoch()
 population = calculatePopulation(currentPop: population, maxPop: era.ceilingPop)
 
+let oneDay = Double(startDate) / Double(realDays!)
+let oneHour = oneDay / 24.0
+let oneMin = oneHour / 60.0
+let oneDotValue = Double(realDays!) * 0.1
+
 func printTimeline() {
     
+    print()
+    print("• = ~\(String(format: "%.2f", oneDotValue)) YEARS")
+    print("–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––")
+    print(("\(yearToDate(inputYear: milestones[31].date))\t\(milestones[31].symbol) <- \(milestones[31].description)")
+        + (" – \(numberFormatter.string(from: NSNumber(value: abs(milestones[31].date)))!) AD"))
+    
+    //Continues through milestones until it is caught up to the right time period
+    var count = 1
+    //    let length = milestones.count
+    while (years - startDate) >= milestones[count].date && count <= 31 {
+        count += 1
+    }
+    count -= 2
+    
+    var currentDate = birthdayDate
+    
+    while count > 0 && (years - startDate) > milestones[count].date {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy"
+        var dateCounter = dateFormatter.string(from: currentDate!)
+        let tomorrow = dateFormatter.string(from: currentDate!.addingTimeInterval(TimeInterval(3600 * 24)))
+        //        var yesterday = dateFormatter.string(from: currentDate.addingTimeInterval(TimeInterval(3600 * -24)))
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "MM/dd/yy @ HH:mm:ss"
+        
+        if count == 1 {
+            dateCounter = dateFormatter.string(from: birthdayDate!)
+        }
+        else {
+            dateCounter = dateFormatter.string(from: currentDate!)
+        }
+        
+        let distance = abs(milestones[count + 1].date - milestones[count].date)
+        
+        let lineNum = (distance / Int(oneDotValue))
+        
+        for _ in 0..<lineNum {
+            
+            dateCounter = dateFormatter.string(from: currentDate!)
+            
+            print("\t\t\t\t\t•")
+            
+            currentDate = currentDate!.addingTimeInterval(TimeInterval(3600 * 24)) // Increase date by 1 day
+        }
+        
+        var date : Int
+        var ep : String
+        if milestones[count].date < 0 {
+            date = milestones[count].date
+            ep = "BC"
+        }
+        else {
+            date = milestones[count].date
+            ep = "AD"
+        }
+        
+        let actualDate = yearToDate(inputYear: date)
+        
+        print(("\(actualDate)\t\(milestones[count].symbol) <- \(milestones[count].description)")
+            + (" – \(numberFormatter.string(from: NSNumber(value: abs(date)))!) \(ep)"))
+        
+        if dateCounter == tomorrow {
+            dateCounter = "\t\t"
+        }
+        else {
+            currentDate = currentDate!.addingTimeInterval(TimeInterval(3600 * 24)) // Increase date by 1 day
+        }
+        
+        count -= 1
+    }
+    
+    //Prints first event in human history = "Apes become bipedal"
+    print()
+    print("\t\t\t\t\t\\")
+    print("\t\t\t\t\t/")
+    print("\t\t\t\t\t\\")
+    print("\t\t\t\t\t/")
+    print("\t\t\t\t\t\\\tSKIP ~4,400,000 YEARS OF EVOLUTION")
+    print("\t\t\t\t\t/")
+    print("\t\t\t\t\t\\")
+    print("\t\t\t\t\t/")
+    print("\t\t\t\t\t\\\n")
+    
+    print("\t\t\t\t\t\(milestones[0].symbol) <- \(milestones[0].description) – 7,000,000 BC")
+    
+}
+
+//Prints simulation status
+func printStats() {
+    
     let yearFormatter = DateFormatter()
-    yearFormatter.dateFormat = "MM/dd/yy HH:mm:ss"
+    yearFormatter.dateFormat = "yyyy-MM-dd"
     
     
+    /*
+     
     var z = Double(years)
     //    var z = 2300000.0
     var percentComplete = 0.0
@@ -105,51 +231,14 @@ func printTimeline() {
         emptySquares = String(emptySquares.dropLast())
     }
     
-    
-    
     print("""
-        *****************************************
-        | "TIMELINE OF HUMAN HISTORY" TERRARIUM |
-        |                                       |
-        |            By: Lou DiMuro             |
-        |              11/28/2018               |
-        *****************************************
         
-        So much has happened in the past 2,000
-        years...
+        If your entire life represented the entirety
+        of human existence...
         
-        
-        
-        
-        Wars have raged,
-        
-        countless empires have risen and
-        collapsed,
-        
-        technology has evolved from basic tools
-        to spaceships,
-        
-        entire cultures have come and gone....
-        
-        
-        
-        
-        If every DAY represented 2,000 YEARS in
-        the tiny world of "LOU'S DESK"...
-        
-        1 DAY       = 2,000 years
-        1 HOUR      = 83.33 years
-        1 MIN       = 1.38 years
-        
-        
-        AS OF \(Date())
-        *******************************
-        DAY                    = \(realDays)
-        YEAR IN \(worldName)     = \(numberFormatter.string(from: NSNumber(value: currentYear))!) \(epoch)
-        YEARS ELAPSED          = \(numberFormatter.string(from: NSNumber(value: years))!)
-        ERA                    = \(era.name)
-        POPULATION             = \(numberFormatter.string(from: NSNumber(value: population / populationFactor))!)
-        START DATE             = \(yearFormatter.string(from: someDateTime))
+            1 DAY   ~ \(String(format: "%.2f", oneDay)) years
+            1 HOUR  ~ \(String(format: "%.2f", oneHour)) years
+            1 MIN   ~ \(String(format: "%.2f", oneMin)) years
         
         
         HUMANITY PROGRESS      = \(String(format: "%.6f", percentComplete))% complete
@@ -162,112 +251,21 @@ func printTimeline() {
         
         
         """)
-    print("• = ~2,000 YEARS")
-    print("–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––")
+    */
     
-    //Continues through milestones until it is caught up to the right time period
-    var count = 1
-    //    let length = milestones.count
-    while (years - startDate) >= milestones[count].date && count <= 31 {
-        count += 1
-    }
-    count -= 2
-    
-    var currentDate = someDateTime
-    
-    while count > 0 && (years - startDate) > milestones[count].date {
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yy"
-        var dateCounter = dateFormatter.string(from: currentDate)
-        let tomorrow = dateFormatter.string(from: currentDate.addingTimeInterval(TimeInterval(3600 * 24)))
-        //        var yesterday = dateFormatter.string(from: currentDate.addingTimeInterval(TimeInterval(3600 * -24)))
-        
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "MM/dd/yy @ HH:mm:ss"
-        var timeCounter = timeFormatter.string(from: currentDate)
-        
-        if count == 1 {
-            dateCounter = dateFormatter.string(from: someDateTime)
-        }
-        else {
-            dateCounter = dateFormatter.string(from: currentDate)
-            timeCounter = timeFormatter.string(from: currentDate)
-        }
-        
-        let distance = abs(milestones[count + 1].date - milestones[count].date)
-        
-        let lineNum = (distance / 2000)
-        
-        for _ in 0..<lineNum {
-            
-            dateCounter = dateFormatter.string(from: currentDate)
-            timeCounter = timeFormatter.string(from: currentDate)
-            
-            print("\t\t\t\t\t•")
-            
-            currentDate = currentDate.addingTimeInterval(TimeInterval(3600 * 24)) // Increase date by 1 day
-        }
-        
-        var date : Int
-        var ep : String
-        if milestones[count].date < 0 {
-            date = milestones[count].date
-            ep = "BC"
-        }
-        else {
-            date = milestones[count].date
-            ep = "AD"
-        }
-        
-        let actualDate = yearToDate(inputYear: date)
-        
-        print(("\(actualDate)\t\(milestones[count].symbol) <- \(milestones[count].description)")
-            + (" – \(numberFormatter.string(from: NSNumber(value: abs(date)))!) \(ep)"))
-        
-        if dateCounter == tomorrow {
-            dateCounter = "\t\t"
-            
-            let yearDifference = abs(date - (count * 2000))
-            let seconds = Double(yearDifference) / secondsToYears
-            let accurateTime = currentDate.addingTimeInterval(TimeInterval(seconds))
-            timeCounter = timeFormatter.string(from: accurateTime)
-        }
-        else {
-            currentDate = currentDate.addingTimeInterval(TimeInterval(3600 * 24)) // Increase date by 1 day
-        }
-        
-        count -= 1
-    }
-    
-    //Prints first event in human history = "Apes become bipedal"
     print()
-    print("\t\t\t\t\t\\")
-    print("\t\t\t\t\t/")
-    print("\t\t\t\t\t\\")
-    print("\t\t\t\t\t/")
-    print("\t\t\t\t\t\\\tSKIP ~4,400,000 YEARS OF EVOLUTION")
-    print("\t\t\t\t\t/")
-    print("\t\t\t\t\t\\")
-    print("\t\t\t\t\t/")
-    print("\t\t\t\t\t\\\n")
-    
-    print("\t\t\t\t\t\(milestones[0].symbol) <- \(milestones[0].description) – 7,000,000 BC")
-    
-}
-
-//Prints simulation status
-func printStats() {
     print("AS OF \(Date())")
     print("*******************************")
-    print("DAY\t\t\t\t= \(realDays)")
+    print("DAY\t\t\t\t= \(realDays!)")
     print("YEAR IN \(worldName)\t= \(numberFormatter.string(from: NSNumber(value: currentYear))!) \(epoch)")
     print("YEARS ELAPSED\t= \(numberFormatter.string(from: NSNumber(value: years))!)")
-    print("ERA\t\t\t\t= \(era.name)")
+//    print("ERA\t\t\t\t= \(era.name)")
     print("POPULATION\t\t= \(numberFormatter.string(from: NSNumber(value: population / populationFactor))!)")
+    print("START DATE\t\t= \(yearFormatter.string(from: birthdayDate!))")
     print("*******************************")
 }
 
+printStats()
 printTimeline()
 
 
