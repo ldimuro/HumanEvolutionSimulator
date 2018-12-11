@@ -92,6 +92,11 @@ var epoch = ""
 let populationFactor = 100
 var population = 1000
 
+let now = Date()
+let nowFormatter = DateFormatter()
+nowFormatter.dateFormat = "MM/dd/yy HH:mm:ss"
+let nowString = nowFormatter.string(from: now)
+
 let numberFormatter = NumberFormatter()
 numberFormatter.numberStyle = NumberFormatter.Style.decimal
 
@@ -130,10 +135,6 @@ func printTimeline() {
         dateFormatter.dateFormat = "MM/dd/yy"
         var dateCounter = dateFormatter.string(from: currentDate!)
         let tomorrow = dateFormatter.string(from: currentDate!.addingTimeInterval(TimeInterval(3600 * 24)))
-        //        var yesterday = dateFormatter.string(from: currentDate.addingTimeInterval(TimeInterval(3600 * -24)))
-        
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "MM/dd/yy @ HH:mm:ss"
         
         if count == 1 {
             dateCounter = dateFormatter.string(from: birthdayDate!)
@@ -153,6 +154,12 @@ func printTimeline() {
             print("\t\t\t\t\t•")
             
             currentDate = currentDate!.addingTimeInterval(TimeInterval(3600 * 24)) // Increase date by 1 day
+        }
+        
+        if count == 23 { // When year is 0 AD (current day)
+            print()
+            print("🔵 🔵 🔵 🔵 🔵 🔵  TODAY (1 AD) 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵 🔵")
+            print()
         }
         
         var date : Int
@@ -254,15 +261,15 @@ func printStats() {
     */
     
     print()
-    print("AS OF \(Date())")
-    print("*******************************")
-    print("DAY\t\t\t\t= \(realDays!)")
-    print("YEAR IN \(worldName)\t= \(numberFormatter.string(from: NSNumber(value: currentYear))!) \(epoch)")
+    print("AS OF \(nowString)")
+    print("****************************")
+    print("DAYS\t\t\t= \(realDays!)")
+//    print("YEAR IN \(worldName)\t= \(numberFormatter.string(from: NSNumber(value: currentYear))!) \(epoch)")
     print("YEARS ELAPSED\t= \(numberFormatter.string(from: NSNumber(value: years))!)")
 //    print("ERA\t\t\t\t= \(era.name)")
-    print("POPULATION\t\t= \(numberFormatter.string(from: NSNumber(value: population / populationFactor))!)")
+//    print("POPULATION\t\t= \(numberFormatter.string(from: NSNumber(value: population / populationFactor))!)")
     print("START DATE\t\t= \(yearFormatter.string(from: birthdayDate!))")
-    print("*******************************")
+    print("****************************")
 }
 
 printStats()
