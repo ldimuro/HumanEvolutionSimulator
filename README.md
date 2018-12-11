@@ -3,7 +3,7 @@
 A program that simulates the timeline of human history from the dawn of the Stone Age (~2,600,000 BC) to the Modern Era relative to the age of the user. 
 
 For instance, if the input birthday is `02/26/1998` and the current date is `12/10/2018`, the conversion to simulated years is:
-```bash
+```
 Real-time   |   Simulated years
 ===============================
 1 DAY       =   342.466
@@ -11,8 +11,7 @@ Real-time   |   Simulated years
 1 MINUTE    =   0.238
 ```
 ## Sample Output
-```bash
-• = ~759.20 YEARS
+```
 –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 12/17/18 20:37:44	✨ <- INTERGALACTIC ERA BEGINS – 2,397 AD
 12/16/18 19:19:38	🤖 <- Invention of Artificial Intelligence – 2,036 AD
