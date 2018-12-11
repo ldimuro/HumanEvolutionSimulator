@@ -1,6 +1,9 @@
-# HumanEvolutionSimulator
+# "Timelne of Human History" Simulator
 
-Foobar is a Python library for dealing with word pluralization.
+A program that simulates the timeline of human history from the dawn of the Stone Age (~2,600,000 BC) to the Modern Era relative to the age of the user. 
+
+For instance:
+
 
 ## Installation
 
