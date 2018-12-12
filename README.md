@@ -1,4 +1,4 @@
-# "Timeline of Human History" Simulator
+# ⏳ "Timeline of Human History" Simulator 🕒
 
 A program that simulates the timeline of human history from the dawn of the Stone Age (~2,600,000 BC) to the Modern Era relative to the age of the user. 
 
@@ -36,8 +36,8 @@ Using the lifespan of the user as a template and the simulated year conversion, 
 	           •
 11/26/18 19:42:57  📝 <- Writing is invented – 4,807 BC
 11/24/18 16:45:43  ⭕️ <- Invention of the wheel – 5,534 BC
-11/23/18 13:38:16  🐔 <- Domestication of chickens – 5,921 BC
-11/23/18 23:27:00  🐴 <- Domestication of horses – 5,781 BC
+11/23/18 18:38:16  🐔 <- Domestication of chickens – 5,921 BC
+11/23/18 12:27:00  🐴 <- Domestication of horses – 5,781 BC
 11/22/18 11:50:44  ✍️ <- First proto-writing – 6,289 BC
 	           •
 	           •
@@ -105,7 +105,7 @@ Using the lifespan of the user as a template and the simulated year conversion, 
 	           •
 	           •
 ```
-Skip ~25,000 years...
+Skip **~25,000 years**...
 
 ```
 	           •
@@ -116,7 +116,7 @@ Skip ~25,000 years...
 	           •
 	           •
 ```
-Skip ~225,000 years
+Skip **~225,000 years**...
 
 ```
 	           •
@@ -127,7 +127,7 @@ Skip ~225,000 years
 	           •
 	           •
 ```
-Skip ~470,000 years...
+Skip **~470,000 years**...
 
 ```
 	           •
@@ -138,7 +138,7 @@ Skip ~470,000 years...
 	           •
 	           •
 ```
-Skip ~1,900,000 years...
+Skip **~1,900,000 years**...
 
 ```
 	           •
@@ -149,7 +149,7 @@ Skip ~1,900,000 years...
 	           •
 	           •
 ```
-Skip ~30,000 years...
+Skip **~30,000 years**...
 
 ```
 	           •
@@ -160,7 +160,7 @@ Skip ~30,000 years...
 	           •
 	           •
 ```
-Skip ~100,000 years...
+Skip **~100,000 years**...
 
 ```
 	           •
@@ -181,22 +181,52 @@ Skip ~100,000 years...
 		   🐵 <- Apes become bipedal – 7,000,000 BC
 ```
 
-## Installation
+## How It Works
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+The way the simulator is able to generate pinpoint timestamps for the milestones of the timeline revolves the format of ```timeIntervalSinceReferenceDate```, whose value is the number of seconds since January 1st, 2001 at 00:00:00. By using this type, I could represent each second of its value as a certain amount of simulated years. In the sample above, each second of the real-time clock represented ```0.00396``` simulated years.
 
-```bash
-pip install foobar
+Each milestone has a target date, in which the method ```calculateMilestones``` uses to compute a random date within +/-5% of the target date. Here's an example of a milestone whose target date is 75,000 BC:
+```swift
+milestones.append(Milestone(description: "Humans develop language", date: calculateMilestones(date: -75000), symbol: "💬"))
 ```
+Using the randomly generated date, this algorithm determines how many seconds it occurred after the birthday of the user:
+```swift
+let year = 75000		
+let totalSeconds = 656130225	// the number of seconds between the user's birthday and the current date
+let secondsToYears = 0.00396	// 2,600,000 years of time / totalSeconds
+let numOfSec = Int(Double(year) / secondsToYears)
+var seconds: Int!
+    
+if inputYear < 0 {
+    seconds = Int(abs(totalSeconds - numOfSec))
+} else {
+    seconds = Int(abs(numOfSec))
+}
+
+let trueDate = birthdayDate!.addingTimeInterval(TimeInterval(seconds))
+
+return trueDate
+```
+So in the sample above, the target date of the Milestone "Humans develop language" is ```75,000 BC```, and ```calculateMilestones``` randomly generated the date ```78,423 BC``` which corresponds the the real-time date ```04/25/18 20:07:21``` (according to the algorithm).
+
+This process is repeated for each milestone (currently there are 31) and they are each chained together in a timeline of •'s, where each one represents a certain amount of years. In the sample above, ```each • = ~759.4 years```.
 
 ## Usage
 
-```python
-import foobar
+Execute the files of this repository in your console (of computers with current versions of Xcode) and enter your birthday:
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+```
+*****************************************
+|       "TIMELINE OF HUMAN HISTORY"     |
+|                                       |
+|             By: Lou DiMuro            |
+|               12/10/2018              |
+*****************************************
+
+Welcome to the TIMELINE OF HUMAN HISTORY Simulator!
+
+Enter your birthday (MM/DD/YYYY):
+2/26/1998
 ```
 
 ## Contributing
