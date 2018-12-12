@@ -211,9 +211,14 @@ So in the sample above, the target date of the Milestone "Humans develop languag
 
 This process is repeated for each milestone (currently there are 31) and they are each chained together in a timeline of •'s, where each one represents a certain amount of years. In the sample above, ```each • = ~759.4 years```.
 
-## Usage
+## Installation and Usage
 
-Execute the files of this repository in your console (of computers with current versions of Xcode) and enter your birthday:
+**On computers with Xcode 6.1+:**
+1. Clone this repository.
+2. Navigate to to the folder ```Human-Evolution-Simulator``` in your console.
+3. Type ```$ swiftc main.swift functions.swift -o humanEvolution``` to compile.
+4. Type ```$ ./humanEvolution``` to execute.
+5. Just type in your birthday in the ```MM/DD/YYYY``` format and hit enter to start the simulation.
 
 ```
 *****************************************
@@ -226,7 +231,7 @@ Execute the files of this repository in your console (of computers with current 
 Welcome to the TIMELINE OF HUMAN HISTORY Simulator!
 
 Enter your birthday (MM/DD/YYYY):
-2/26/1998
+02/26/1998
 ```
 
 ## Contributing
