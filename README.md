@@ -1,15 +1,24 @@
 # ⏳ "Timeline of Human History" Simulator 🕒
 
+## Table of Contents  
+* [Main Idea](https://github.com/ldimuro/HumanEvolutionSimulator#main-idea)  
+* [Sample Output](https://github.com/ldimuro/HumanEvolutionSimulator#sample-output)
+* [How It Works](https://github.com/ldimuro/HumanEvolutionSimulator#how-it-works)
+* [Installation and Usage](https://github.com/ldimuro/HumanEvolutionSimulator#installation-and-usage)
+
+
+## Main Idea
+
 A program that simulates the timeline of human history from the dawn of the Stone Age (~2,600,000 BC) to the Modern Era relative to the age of the user. 
 
 For instance, if the input birthday is `02/26/1998` and the current date is `12/10/2018`, the conversion to simulated years is:
-```
-Real-time   |   Simulated years
-–––––––––––––––––––––––––––––––
-1 DAY       =   342.466
-1 HOUR      =   14.269
-1 MINUTE    =   0.238
-```
+
+Real-time  | Simulated years
+---------- | ---------------
+1 day      | 342.466
+1 hour     | 14.269
+1 minute   | 0.238
+
 Using the lifespan of the user as a template and the simulated year conversion, the simulator generates timestamps of important events in human history, as demonstrated in the Sample Output below.
 
 
@@ -181,6 +190,7 @@ Skip **~100,000 years**...
 		   🐵 <- Apes become bipedal – 7,000,000 BC
 ```
 
+
 ## How It Works
 
 The way the simulator is able to generate pinpoint timestamps for the milestones of the timeline revolves the format of ```timeIntervalSinceReferenceDate```, whose value is the number of seconds since January 1st, 2001 at 00:00:00. By using this type, I could represent each second of its value as a certain amount of simulated years. In the sample above, each second of the real-time clock represented ```0.00396``` simulated years.
@@ -210,6 +220,7 @@ return trueDate
 So in the sample above, the target date of the Milestone "Humans develop language" is ```75,000 BC```, and ```calculateMilestones``` randomly generated the date ```78,423 BC``` which corresponds the the real-time date ```04/25/18 20:07:21``` (according to the algorithm).
 
 This process is repeated for each milestone (currently there are 31) and they are each chained together in a timeline of •'s, where each one represents a certain amount of years. In the sample above, ```each • = ~759.4 years```.
+
 
 ## Installation and Usage
 
